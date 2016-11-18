@@ -141,7 +141,6 @@ function callbacks() {
       }
     }
     else {
-      print(checkcallbacksignature());
       echo("{\"status\": \"error\"}");
     }
   }
@@ -156,6 +155,12 @@ function callbacks() {
     endwhile;
     $order = new WC_Order($orderid);
     $order->update_status('on-hold', __('TiU Internetkassa reported a problem with the transaction, check administration for more details.', 'woothemes'));
+    if (checkcallbacksignature()) {
+      $keys = array("amount", "BR", "CN", "currency", "ED", "orderID", "PAYID", "PM", "STATUS");
+      foreach ($keys as $key) {
+        add_post_meta($orderid, "internetkassa_".$key, $_REQUEST[$key], true);
+      }
+    }
   }
   elseif (strpos($_SERVER['REQUEST_URI'], 'callback-error/')) {
     //The university will send an e-mail to the developer address (specified in their backend)
