@@ -177,12 +177,7 @@ function checkcallbacksignature() {
     }
   }
   $generated = strtoupper(sha1($hashinput));
-  if ($generated == $_REQUEST['SHASIGN']) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return ($generated === $_REQUEST['SHASIGN']);
 }
 
 function woocommerce_add_tiu_internetkassa_gateway($methods) {
